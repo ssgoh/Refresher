@@ -162,6 +162,10 @@ function loadAllTutorials() {
     if (tutorialsContainer) {
         tutorialsContainer.innerHTML = '';
         
+        // Check if a period is selected from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedPeriod = urlParams.get('period');
+        
         // Group tutorials by year and month
         const tutorialsByPeriod = {};
         
@@ -189,49 +193,88 @@ function loadAllTutorials() {
         const periodsContainer = document.createElement('div');
         periodsContainer.className = 'periods-container';
         
-        // Create sections for each period
-        sortedPeriods.forEach(period => {
-            // Sort tutorials alphabetically by title within each period
-            const sortedTutorials = tutorialsByPeriod[period].sort((a, b) => 
-                a.title.localeCompare(b.title)
-            );
+        if (selectedPeriod) {
+            // Display tutorials for the selected period
+            if (tutorialsByPeriod[selectedPeriod]) {
+                // Add a back button
+                const backButton = document.createElement('a');
+                backButton.href = 'tutorials.html';
+                backButton.className = 'back-button';
+                backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to All Periods';
+                tutorialsContainer.appendChild(backButton);
+                
+                // Add period header
+                const periodHeader = document.createElement('h3');
+                periodHeader.className = 'period-header selected-period';
+                periodHeader.textContent = `Tutorials from ${selectedPeriod}`;
+                periodsContainer.appendChild(periodHeader);
+                
+                // Sort tutorials alphabetically by title
+                const sortedTutorials = tutorialsByPeriod[selectedPeriod].sort((a, b) => 
+                    a.title.localeCompare(b.title)
+                );
+                
+                // Create tutorial list
+                const tutorialList = document.createElement('ul');
+                tutorialList.className = 'tutorial-list';
+                
+                // Add tutorials to the list
+                sortedTutorials.forEach(tutorial => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'tutorial-list-item';
+                    
+                    listItem.innerHTML = `
+                        <div class="list-item-content">
+                            <i class="fas fa-book"></i>
+                            <div class="list-item-details">
+                                <h3><a href="tutorial.html?id=${tutorial.id}">${tutorial.title}</a></h3>
+                                <span class="date">${formatDate(tutorial.date)}</span>
+                                <p>${tutorial.description}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    tutorialList.appendChild(listItem);
+                });
+                
+                periodsContainer.appendChild(tutorialList);
+            } else {
+                // Period not found
+                const notFoundMessage = document.createElement('p');
+                notFoundMessage.textContent = 'No tutorials found for the selected period.';
+                periodsContainer.appendChild(notFoundMessage);
+            }
+        } else {
+            // Display only periods
+            const periodsHeader = document.createElement('h3');
+            periodsHeader.className = 'section-header';
+            periodsHeader.textContent = 'Select a Period';
+            periodsContainer.appendChild(periodsHeader);
             
-            // Create period section
-            const periodSection = document.createElement('div');
-            periodSection.className = 'period-section';
+            // Create period list
+            const periodList = document.createElement('ul');
+            periodList.className = 'period-list';
             
-            // Create period header
-            const periodHeader = document.createElement('h3');
-            periodHeader.className = 'period-header';
-            periodHeader.textContent = period;
-            periodSection.appendChild(periodHeader);
-            
-            // Create tutorial list for this period
-            const tutorialList = document.createElement('ul');
-            tutorialList.className = 'tutorial-list';
-            
-            // Add tutorials to the list
-            sortedTutorials.forEach(tutorial => {
+            // Add periods to the list
+            sortedPeriods.forEach(period => {
                 const listItem = document.createElement('li');
-                listItem.className = 'tutorial-list-item';
+                listItem.className = 'period-list-item';
                 
                 listItem.innerHTML = `
-                    <div class="list-item-content">
-                        <i class="fas fa-book"></i>
-                        <div class="list-item-details">
-                            <h3><a href="tutorial.html?id=${tutorial.id}">${tutorial.title}</a></h3>
-                            <span class="date">${formatDate(tutorial.date)}</span>
-                            <p>${tutorial.description}</p>
+                    <a href="tutorials.html?period=${encodeURIComponent(period)}" class="period-link">
+                        <div class="period-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${period}</span>
+                            <span class="tutorial-count">${tutorialsByPeriod[period].length} tutorials</span>
                         </div>
-                    </div>
+                    </a>
                 `;
                 
-                tutorialList.appendChild(listItem);
+                periodList.appendChild(listItem);
             });
             
-            periodSection.appendChild(tutorialList);
-            periodsContainer.appendChild(periodSection);
-        });
+            periodsContainer.appendChild(periodList);
+        }
         
         tutorialsContainer.appendChild(periodsContainer);
     }

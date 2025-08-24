@@ -141,6 +141,90 @@ nav ul li a:hover, nav ul li a.active {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.section-header {
+    color: #2a6496;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+.period-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.period-list-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.period-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.period-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.period-item {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.period-item i {
+    font-size: 2rem;
+    color: #2a6496;
+    margin-bottom: 10px;
+}
+
+.period-item span {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.tutorial-count {
+    font-size: 0.9rem !important;
+    color: #6c757d !important;
+    margin-top: 5px;
+}
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    color: #2a6496;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #e9ecef;
+}
+
+.back-button i {
+    margin-right: 5px;
+}
+
+.selected-period {
+    margin-top: 10px;
+}
+
 .tutorial-list {
     list-style: none;
     padding: 0;
