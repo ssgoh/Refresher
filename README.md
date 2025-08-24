@@ -8,6 +8,7 @@ A simple website for teachers to post tutorials and notes for their students wit
 - **Content Management**: Teachers can add new tutorials and notes through the admin panel
 - **Responsive Design**: Works well on desktop and mobile devices
 - **Simple Authentication**: Basic login system for teachers to manage content
+- **Scalable Tutorial List**: Tutorials and notes are displayed as a list of links, allowing for easy navigation as content grows
 
 ## Getting Started
 

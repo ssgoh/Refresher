@@ -115,9 +115,29 @@ function loadAllTutorials() {
         tutorialsContainer.innerHTML = '';
         const sortedTutorials = [...sampleTutorials].sort((a, b) => new Date(b.date) - new Date(a.date));
         
+        // Create a list element to hold all tutorials
+        const tutorialList = document.createElement('ul');
+        tutorialList.className = 'tutorial-list';
+        
         sortedTutorials.forEach(tutorial => {
-            tutorialsContainer.appendChild(createContentCard(tutorial));
+            const listItem = document.createElement('li');
+            listItem.className = 'tutorial-list-item';
+            
+            listItem.innerHTML = `
+                <div class="list-item-content">
+                    <i class="fas fa-book"></i>
+                    <div class="list-item-details">
+                        <h3><a href="tutorial.html?id=${tutorial.id}">${tutorial.title}</a></h3>
+                        <span class="date">${formatDate(tutorial.date)}</span>
+                        <p>${tutorial.description}</p>
+                    </div>
+                </div>
+            `;
+            
+            tutorialList.appendChild(listItem);
         });
+        
+        tutorialsContainer.appendChild(tutorialList);
     }
 }
 
@@ -129,9 +149,29 @@ function loadAllNotes() {
         notesContainer.innerHTML = '';
         const sortedNotes = [...sampleNotes].sort((a, b) => new Date(b.date) - new Date(a.date));
         
+        // Create a list element to hold all notes
+        const notesList = document.createElement('ul');
+        notesList.className = 'tutorial-list';
+        
         sortedNotes.forEach(note => {
-            notesContainer.appendChild(createContentCard(note));
+            const listItem = document.createElement('li');
+            listItem.className = 'tutorial-list-item';
+            
+            listItem.innerHTML = `
+                <div class="list-item-content">
+                    <i class="fas fa-sticky-note"></i>
+                    <div class="list-item-details">
+                        <h3><a href="note.html?id=${note.id}">${note.title}</a></h3>
+                        <span class="date">${formatDate(note.date)}</span>
+                        <p>${note.description}</p>
+                    </div>
+                </div>
+            `;
+            
+            notesList.appendChild(listItem);
         });
+        
+        notesContainer.appendChild(notesList);
     }
 }
 
