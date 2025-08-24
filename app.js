@@ -23,6 +23,54 @@ const sampleTutorials = [
         date: '2024-06-15',
         content: 'JavaScript is a programming language that conforms to the ECMAScript specification...',
         type: 'tutorial'
+    },
+    {
+        id: 4,
+        title: 'Advanced CSS Layouts',
+        description: 'Learn about Flexbox and Grid for modern layouts.',
+        date: '2024-05-25',
+        content: 'Modern CSS layouts using Flexbox and Grid allow for more complex and responsive designs...',
+        type: 'tutorial'
+    },
+    {
+        id: 5,
+        title: 'Database Design',
+        description: 'Fundamentals of relational database design.',
+        date: '2024-05-10',
+        content: 'Proper database design is crucial for application performance and data integrity...',
+        type: 'tutorial'
+    },
+    {
+        id: 6,
+        title: 'React Components',
+        description: 'Building reusable components in React.',
+        date: '2024-04-28',
+        content: 'React components are the building blocks of React applications...',
+        type: 'tutorial'
+    },
+    {
+        id: 7,
+        title: 'Python for Beginners',
+        description: 'Introduction to Python programming language.',
+        date: '2024-04-15',
+        content: 'Python is a high-level, interpreted programming language known for its readability...',
+        type: 'tutorial'
+    },
+    {
+        id: 8,
+        title: 'Git Version Control',
+        description: 'Managing code with Git and GitHub.',
+        date: '2023-12-10',
+        content: 'Git is a distributed version control system that helps track changes in source code...',
+        type: 'tutorial'
+    },
+    {
+        id: 9,
+        title: 'Algorithms Fundamentals',
+        description: 'Basic algorithms and data structures.',
+        date: '2023-12-05',
+        content: 'Understanding algorithms and data structures is essential for efficient programming...',
+        type: 'tutorial'
     }
 ];
 
@@ -107,37 +155,85 @@ function loadRecentContent() {
     }
 }
 
-// Load all tutorials on the tutorials page
+// Load all tutorials on the tutorials page organized by year and month
 function loadAllTutorials() {
     const tutorialsContainer = document.getElementById('tutorials-container');
     
     if (tutorialsContainer) {
         tutorialsContainer.innerHTML = '';
-        const sortedTutorials = [...sampleTutorials].sort((a, b) => new Date(b.date) - new Date(a.date));
         
-        // Create a list element to hold all tutorials
-        const tutorialList = document.createElement('ul');
-        tutorialList.className = 'tutorial-list';
+        // Group tutorials by year and month
+        const tutorialsByPeriod = {};
         
-        sortedTutorials.forEach(tutorial => {
-            const listItem = document.createElement('li');
-            listItem.className = 'tutorial-list-item';
+        sampleTutorials.forEach(tutorial => {
+            const date = new Date(tutorial.date);
+            const year = date.getFullYear();
+            const month = date.toLocaleString('default', { month: 'short' });
+            const period = `${year} ${month}`;
             
-            listItem.innerHTML = `
-                <div class="list-item-content">
-                    <i class="fas fa-book"></i>
-                    <div class="list-item-details">
-                        <h3><a href="tutorial.html?id=${tutorial.id}">${tutorial.title}</a></h3>
-                        <span class="date">${formatDate(tutorial.date)}</span>
-                        <p>${tutorial.description}</p>
-                    </div>
-                </div>
-            `;
+            if (!tutorialsByPeriod[period]) {
+                tutorialsByPeriod[period] = [];
+            }
             
-            tutorialList.appendChild(listItem);
+            tutorialsByPeriod[period].push(tutorial);
         });
         
-        tutorialsContainer.appendChild(tutorialList);
+        // Sort periods chronologically (newest first)
+        const sortedPeriods = Object.keys(tutorialsByPeriod).sort((a, b) => {
+            const dateA = new Date(a);
+            const dateB = new Date(b);
+            return dateB - dateA;
+        });
+        
+        // Create a container for all periods
+        const periodsContainer = document.createElement('div');
+        periodsContainer.className = 'periods-container';
+        
+        // Create sections for each period
+        sortedPeriods.forEach(period => {
+            // Sort tutorials alphabetically by title within each period
+            const sortedTutorials = tutorialsByPeriod[period].sort((a, b) => 
+                a.title.localeCompare(b.title)
+            );
+            
+            // Create period section
+            const periodSection = document.createElement('div');
+            periodSection.className = 'period-section';
+            
+            // Create period header
+            const periodHeader = document.createElement('h3');
+            periodHeader.className = 'period-header';
+            periodHeader.textContent = period;
+            periodSection.appendChild(periodHeader);
+            
+            // Create tutorial list for this period
+            const tutorialList = document.createElement('ul');
+            tutorialList.className = 'tutorial-list';
+            
+            // Add tutorials to the list
+            sortedTutorials.forEach(tutorial => {
+                const listItem = document.createElement('li');
+                listItem.className = 'tutorial-list-item';
+                
+                listItem.innerHTML = `
+                    <div class="list-item-content">
+                        <i class="fas fa-book"></i>
+                        <div class="list-item-details">
+                            <h3><a href="tutorial.html?id=${tutorial.id}">${tutorial.title}</a></h3>
+                            <span class="date">${formatDate(tutorial.date)}</span>
+                            <p>${tutorial.description}</p>
+                        </div>
+                    </div>
+                `;
+                
+                tutorialList.appendChild(listItem);
+            });
+            
+            periodSection.appendChild(tutorialList);
+            periodsContainer.appendChild(periodSection);
+        });
+        
+        tutorialsContainer.appendChild(periodsContainer);
     }
 }
 
